@@ -1,0 +1,218 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Chess Board</title>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>/*For some reason I'm unable to get */</script>
+        <style>
+        body {
+        margin: 30px;
+        background-color: lightsteelblue;
+        }
+        .moved {
+            height: 47px;
+            width: 47px;
+        }
+        .square {
+        display: inline-block;
+        height: 78px;
+        width: 78px;
+        border: 1px solid black;
+        overflow: auto;
+        text-align: center;
+        background-color: slategrey;
+        font-size: large;
+        }
+        .square.black {
+        background-color: darkslategrey;
+        }
+
+        .deadZone{
+        display: inline-block;
+        height: 60px;
+        width: 100%;
+        border: 1px solid black;
+        overflow: auto;
+        background-color: black;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+        </style>
+
+        <script>
+
+            function allowDrop(ev) {
+                ev.preventDefault();
+            };
+
+            function drag(ev) {
+                ev.dataTransfer.setData("image", ev.target.id);
+            };
+
+            function drop(ev) {
+                ev.preventDefault();
+                ev.target.appendChild(document.getElementById(ev.dataTransfer.getData("image")));
+            };
+        </script>
+        <script>
+            $(function () {
+                var socket = io();
+                $('form').submit(function(e){
+                    e.preventDefault(); // prevents page reloading
+                    socket.emit('chat message', $('#m').val());
+                    $('#m').val('');
+                    return false;
+                });
+
+                socket.on('chat message', function(msg){
+                    $('#messages').append($('<li>').text(msg));
+                });
+            });
+
+        </script>
+    </head>
+
+    <body>
+        <ul id="messages"></ul>
+        <form action="">
+            <input id="m" autocomplete="off">
+            <button>
+                Send
+            </button>
+        </form>
+
+        <div id="chess_board" ondrop="drop(event);" ondragover="allowDrop(event);" ondragstart="drag(event)">
+        <div id="row_8" class="board_row">
+        <div id="A8" class="square white">
+            <img id="BRL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chess_rdt45.svg/45px-Chess_rdt45.svg.png" draggable="true">A8</div>
+        <div id="B8" class="square black">
+            <img id="BNL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Chess_ndt45.svg/45px-Chess_ndt45.svg.png" draggable="true">B8</div>
+        <div id="C8" class="square white">
+            <img id="BBL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/45px-Chess_bdt45.svg.png" draggable="true">C8</div>
+        <div id="D8" class="square black">
+            <img id="BQ" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Chess_qdt45.svg/45px-Chess_qdt45.svg.png" draggable="true">D8</div>
+        <div id="E8" class="square white">
+            <img id="BK" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Chess_kdt45.svg/45px-Chess_kdt45.svg.png" draggable="true">E8</div>
+        <div id="F8" class="square black">
+            <img id="BBR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/45px-Chess_bdt45.svg.png" draggable="true">F8</div>
+        <div id="G8" class="square white">
+            <img id="BNR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Chess_ndt45.svg/45px-Chess_ndt45.svg.png" draggable="true">G8</div>
+        <div id="H8" class="square black">
+            <img id="BRR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chess_rdt45.svg/45px-Chess_rdt45.svg.png" draggable="true">H8</div>
+        </div>
+
+        <div id="row_7" class="board_row">
+        <div id="A7" class="square black">
+            <img id="BP1" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">A7</div>
+        <div id="B7" class="square white">
+            <img id="BP2" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">B7</div>
+        <div id="C7" class="square black">
+            <img id="BP3" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">C7</div>
+        <div id="D7" class="square white">
+            <img id="BP4" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">D7</div>
+        <div id="E7" class="square black">
+            <img id="BP5" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">E7</div>
+        <div id="F7" class="square white">
+            <img id="BP6" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">F7</div>
+        <div id="G7" class="square black">
+            <img id="BP7" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">G7</div>
+        <div id="H7" class="square white">
+            <img id="BP8" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png" draggable="true">H7</div>
+        </div>
+
+        <div id="row_6" class="board_row">
+        <div id="A6" class="square white">A6</div>
+        <div id="B6" class="square black">B6</div>
+        <div id="C6" class="square white">C6</div>
+        <div id="D6" class="square black">D6</div>
+        <div id="E6" class="square white">E6</div>
+        <div id="F6" class="square black">F6</div>
+        <div id="G6" class="square white">G6</div>
+        <div id="H6" class="square black">H6</div>
+        </div>
+
+        <div id="row_5" class="board_row">
+        <div id="A5" class="square black">A5</div>
+        <div id="B5" class="square white">B5</div>
+        <div id="C5" class="square black">C5</div>
+        <div id="D5" class="square white">D5</div>
+        <div id="E5" class="square black">E5</div>
+        <div id="F5" class="square white">F5</div>
+        <div id="G5" class="square black">G5</div>
+        <div id="H5" class="square white">H5</div>
+        </div>
+
+        <div id="row_4" class="board_row">
+        <div id="A4" class="square white">A4</div>
+        <div id="B4" class="square black">B4</div>
+        <div id="C4" class="square white">C4</div>
+        <div id="D4" class="square black">D4</div>
+        <div id="E4" class="square white">E4</div>
+        <div id="F4" class="square black">F4</div>
+        <div id="G4" class="square white">G4</div>
+        <div id="H4" class="square black">H4</div>
+        </div>
+
+        <div id="row_3" class="board_row">
+        <div id="A3" class="square black">A3</div>
+        <div id="B3" class="square white">B3</div>
+        <div id="C3" class="square black">C3</div>
+        <div id="D3" class="square white">D3</div>
+        <div id="E3" class="square black">E3</div>
+        <div id="F3" class="square white">F3</div>
+        <div id="G3" class="square black">G3</div>
+        <div id="H3" class="square white">H3</div>
+        </div>
+
+        <div id="row_2" class="board_row">
+        <div id="A2" class="square white">
+            <img id="WP1" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">A2</div>
+        <div id="B2" class="square black">
+            <img id="WP2" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">B2</div>
+        <div id="C2" class="square white">
+            <img id="WP3" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">C2</div>
+        <div id="D2" class="square black">
+            <img id="WP4" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">D2</div>
+        <div id="E2" class="square white">
+            <img id="WP5" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">E2</div>
+        <div id="F2" class="square black">
+            <img id="WP6" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">F2</div>
+        <div id="G2" class="square white">
+            <img id="WP7" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">G2</div>
+        <div id="H2" class="square black">
+            <img id="WP8" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png" draggable="true">H2</div>
+        </div>
+
+        <div id="row_1" class="board_row">
+        <div id="A1" class="square black">
+            <img id="WRL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chess_rlt45.svg/45px-Chess_rlt45.svg.png" draggable="true">A1</div>
+        <div id="B1" class="square white">
+            <img id="WNL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chess_nlt45.svg/45px-Chess_nlt45.svg.png" draggable="true">B1</div>
+        <div id="C1" class="square black">
+            <img id="WBL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Chess_blt45.svg/45px-Chess_blt45.svg.png" draggable="true">C1</div>
+        <div id="D1" class="square white">
+            <img id="WK" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Chess_klt45.svg/45px-Chess_klt45.svg.png" draggable="true">D1</div>
+        <div id="E1" class="square black">
+            <img id="WQ" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Chess_qlt45.svg/45px-Chess_qlt45.svg.png" draggable="true">E1</div>
+        <div id="F1" class="square white">
+            <img id="WBR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Chess_blt45.svg/45px-Chess_blt45.svg.png" draggable="true">F1</div>
+        <div id="G1" class="square black">
+            <img id="WNR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chess_nlt45.svg/45px-Chess_nlt45.svg.png" draggable="true">G1</div>
+        <div id="H1" class="square white">
+            <img id="WRR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chess_rlt45.svg/45px-Chess_rlt45.svg.png" draggable="true">H1</div>
+        </div>
+        </div>
+        <h2>Place Taken Pieces Below.</h2>
+        <div id="dead_zone" class="deadZone" ondrop="drop(event);" ondragover="allowDrop(event);">
+    </body>
+
+</html>

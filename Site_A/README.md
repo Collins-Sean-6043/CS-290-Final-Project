@@ -1,0 +1,3 @@
+Hey Joseph, 
+
+This is the chess game that people can open up in a browser that doesn't save anything but that someone can play against another person at the same computer. This version does have a chat that I added on through socket.io so people can play against each other online but would have to type out their move and the other player would manually reflect that on their side of the board. The issue with this page is that it doesn't really have any backend server side stuff going on.

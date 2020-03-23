@@ -1,0 +1,666 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+        /*
+        I adapted most of my code for moving pieces from this github repository made from a Stack-Exchange post.
+        https://gist.github.com/dirkk0/4565681#file-server-js-L7
+        */
+        .moved {
+            z-index: +1;
+        }
+        .square {
+        display: inline-block;
+        height: 83px;
+        width: 83px;
+        border: 1px solid black;
+        overflow: auto;
+        background-color: slategrey;
+        z-index: -1;
+        }
+
+        .square.black {
+        background-color: darkslategrey;
+        }
+
+        .deadZone{
+        display: inline-block;
+        height: 100px;
+        width: 80%;
+        border: 1px solid black;
+        overflow: auto;
+        background-color: black;
+        }
+        </style>
+        <title>Chess Board</title>
+        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                var socket = io.connect();
+                // Black King Update
+                socket.on('update_position_BK', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BK").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BK").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BK).position();
+                    socket.emit('receive_position_BK', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Queen Update
+                socket.on('update_position_BQ', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BQ").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BQ").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BQ).position();
+                    socket.emit('receive_position_BQ', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White King Update
+                socket.on('update_position_WK', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WK").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WK").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WK).position();
+                    socket.emit('receive_position_WK', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Queen Update
+                socket.on('update_position_WQ', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WQ").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WQ").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WQ).position();
+                    socket.emit('receive_position_WQ', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                
+                // White Rook Left Update
+                socket.on('update_position_WRL', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WRL").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WRL").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WRL).position();
+                    socket.emit('receive_position_WRL', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Rook Right Update
+                socket.on('update_position_WRR', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WRR").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WRR").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WRR).position();
+                    socket.emit('receive_position_WRR', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Rook Left Update
+                socket.on('update_position_BRL', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BRL").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BRL").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BRL).position();
+                    socket.emit('receive_position_BRL', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Rook Right Update
+                socket.on('update_position_BRR', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BRR").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BRR").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BRR).position();
+                    socket.emit('receive_position_BRR', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+
+                // Black Bishop Right Update
+                socket.on('update_position_BBR', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BBR").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BBR").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BBR).position();
+                    socket.emit('receive_position_BBR', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Bishop Left Update
+                socket.on('update_position_BBL', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BBL").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BBL").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BBL).position();
+                    socket.emit('receive_position_BBL', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Bishop Right Update
+                socket.on('update_position_WBR', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WBR").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WBR").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WBR).position();
+                    socket.emit('receive_position_WBR', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Bishop Left Update
+                socket.on('update_position_WBL', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WBL").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WBL").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WBL).position();
+                    socket.emit('receive_position_WBL', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Knight Left Update
+                socket.on('update_position_BKL', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BKL").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BKL").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BKL).position();
+                    socket.emit('receive_position_BKL', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Knight Right Update
+                socket.on('update_position_BKR', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BKR").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BKR").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BKR).position();
+                    socket.emit('receive_position_BKR', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Knight Left Update
+                socket.on('update_position_WKL', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WKL").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WKL").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WKL).position();
+                    socket.emit('receive_position_WKL', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Knight Right Update
+                socket.on('update_position_WKR', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WKR").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WKR").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WKR).position();
+                    socket.emit('receive_position_WKR', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn One Update
+                socket.on('update_position_WP1', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP1").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP1").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP1).position();
+                    socket.emit('receive_position_WP1', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Two Update
+                socket.on('update_position_WP2', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP2").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP2").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP1).position();
+                    socket.emit('receive_position_WP2', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Three Update
+                socket.on('update_position_WP3', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP3").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP3").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP3).position();
+                    socket.emit('receive_position_WP3', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Four Update
+                socket.on('update_position_WP4', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP4").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP4").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP4).position();
+                    socket.emit('receive_position_WP4', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Five Update
+                socket.on('update_position_WP5', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP5").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP5").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP5).position();
+                    socket.emit('receive_position_WP5', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Six Update
+                socket.on('update_position_WP6', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP6").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP6").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP6).position();
+                    socket.emit('receive_position_WP6', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Seven Update
+                socket.on('update_position_WP7', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP7").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP7").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP7).position();
+                    socket.emit('receive_position_WP7', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // White Pawn Eight Update
+                socket.on('update_position_WP8', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#WP8").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#WP8").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(WP8).position();
+                    socket.emit('receive_position_WP8', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn One Update
+                socket.on('update_position_BP1', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP1").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP1").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP1).position();
+                    socket.emit('receive_position_BP1', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Two Update
+                socket.on('update_position_BP2', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP2").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP2").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP1).position();
+                    socket.emit('receive_position_BP2', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Three Update
+                socket.on('update_position_BP3', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP3").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP3").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP3).position();
+                    socket.emit('receive_position_BP3', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Four Update
+                socket.on('update_position_BP4', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP4").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP4").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP4).position();
+                    socket.emit('receive_position_BP4', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Five Update
+                socket.on('update_position_BP5', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP5").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP5").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP5).position();
+                    socket.emit('receive_position_BP5', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Six Update
+                socket.on('update_position_BP6', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP6").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP6").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP6).position();
+                    socket.emit('receive_position_BP6', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Seven Update
+                socket.on('update_position_BP7', function (data) {
+                    let BP7x = data.x;
+                    let BP7y = data.y;
+                    $("#BP7").css({
+                        left: BP7x + "px",
+                        top: BP7y + "px"
+                    });
+                });
+                $("#BP7").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP7).position();
+                    socket.emit('receive_position_BP7', {
+                        BP7x: coord.left,
+                        BP7y: coord.top
+                    });
+                    }
+                });
+                // Black Pawn Eight Update
+                socket.on('update_position_BP8', function (data) {
+                    let x = data.x;
+                    let y = data.y;
+                    $("#BP8").css({
+                        left: x + "px",
+                        top: y + "px"
+                    });
+                });
+                $("#BP8").draggable({
+                    drag: function (event, ui) {
+                    let coord = $(BP8).position();
+                    socket.emit('receive_position_BP8', {
+                        x: coord.left,
+                        y: coord.top
+                    });
+                    }
+                });
+
+            });
+
+        </script>
+
+    </head>
+
+    <body>
+
+            <img id="BRL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chess_rdt45.svg/45px-Chess_rdt45.svg.png">
+            <img id="BKL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Chess_ndt45.svg/45px-Chess_ndt45.svg.png">
+            <img id="BBL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/45px-Chess_bdt45.svg.png">
+            <img id="BQ" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Chess_qdt45.svg/45px-Chess_qdt45.svg.png">
+            <img id="BK" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Chess_kdt45.svg/45px-Chess_kdt45.svg.png">
+            <img id="BBR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/45px-Chess_bdt45.svg.png">
+            <img id="BKR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Chess_ndt45.svg/45px-Chess_ndt45.svg.png">
+            <img id="BRR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Chess_rdt45.svg/45px-Chess_rdt45.svg.png">
+            <img id="BP1" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP2" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP3" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP4" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP5" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP6" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP7" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="BP8" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Chess_pdt45.svg/45px-Chess_pdt45.svg.png">
+            <img id="WP1" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP2" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP3" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP4" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP5" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP6" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP7" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WP8" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Chess_plt45.svg/45px-Chess_plt45.svg.png">
+            <img id="WRL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chess_rlt45.svg/45px-Chess_rlt45.svg.png">
+            <img id="WKL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chess_nlt45.svg/45px-Chess_nlt45.svg.png">
+            <img id="WBL" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Chess_blt45.svg/45px-Chess_blt45.svg.png">
+            <img id="WK" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Chess_klt45.svg/45px-Chess_klt45.svg.png">
+            <img id="WQ" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Chess_qlt45.svg/45px-Chess_qlt45.svg.png">
+            <img id="WBR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Chess_blt45.svg/45px-Chess_blt45.svg.png">
+            <img id="WKR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Chess_nlt45.svg/45px-Chess_nlt45.svg.png">
+            <img id="WRR" class="moved" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Chess_rlt45.svg/45px-Chess_rlt45.svg.png">
+
+        <img id="fakechessboard" style='height: 800px; width: 800px;' src='https://www.designchess.com/wp-content/uploads/Black-board-4.jpg'>
+    </body>
+
+</html>
